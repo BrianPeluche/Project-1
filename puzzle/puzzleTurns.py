@@ -1,9 +1,11 @@
 from puzzle.tilePuzzle import PuzzleState
 
+
 class Turns:
     # Constructor to initialize the Turns class
-    def init(self, initialState):
+    def __init__(self, initialState, cost):
         self.initialState = initialState
+        self.cost = cost
 
     # Method to check possible moves from the current state
     def possibleMoves(self, currState, direction):
@@ -28,6 +30,8 @@ class Turns:
                 return False
             else:
                 return True
+        else:
+            return False
 
     # Method to generate all possible tile moves from the current state
     def tileMoves(self, currState):
@@ -35,7 +39,9 @@ class Turns:
         size = currState.boardSize
         directions = ['up', 'down', 'left', 'right']
         for direction in directions:
-            if self.possibleMoves(currState, direction, size):
+            if self.possibleMoves(currState, direction):
                 newState = currState.moveTile(direction, size)
+                newState.prevState = currState
                 moves.append((direction, newState))
+                self.cost += 1
         return moves
