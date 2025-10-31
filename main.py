@@ -2,10 +2,10 @@
 #from heuristic import count, a_star, euclidean
 
 from algorithm.uniformSearch import uniformSearch
-#from puzzle.tilePuzzle import puzzleState
+from puzzle.tilePuzzle import PuzzleState
 
 
-print("\nWelcome to XXX bgarc208/hwheeler 8 puzzle solver. Type “1” \nto use a default puzzle, or “2” to enter your own puzzle.\n")
+print("\nWelcome to bgarc208/hwhee004 8 puzzle solver. Type “1” \nto use a default puzzle, or “2” to enter your own puzzle.\n")
 
 user_input = int(input("Please enter a number: "))
     
@@ -37,7 +37,8 @@ while user_input != 1 and user_input != 2 and user_input != 3:
     user_input = int(input("Please enter a number: "))
 
 if user_input == 1:
-    s = uniformSearch(initial)
+    puzzle = PuzzleState(list(initial), None, 3, "Initial State")
+    s = uniformSearch(puzzle)
     s.uniformCostSearch()
 # elif user_input == 2:
 #     #h = lambda s: count(s)

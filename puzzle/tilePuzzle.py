@@ -1,9 +1,8 @@
 class PuzzleState:
 
     # Constructor to initialize the puzzle state
-    def __init__(self, board, emptyTile, prevState, boardSize, direction): 
+    def __init__(self, board, prevState, boardSize, direction): 
         self.board = board
-        self.emptyTile = emptyTile
         self.prevState = prevState
         self.boardSize = boardSize
         self.direction = direction
@@ -14,8 +13,8 @@ class PuzzleState:
 
     # Method to get the (row, col) position of the empty tile
     def emptyTilePos(self, size):
-        row = self.emptyTile // size
-        col = self.emptyTile % size
+        row = self.findEmptyTile() // size
+        col = self.findEmptyTile() % size
         return (row, col)
     
     # Method to check if the current state is the goal state
@@ -43,8 +42,8 @@ class PuzzleState:
         if 0 <= newRow < size and 0 <= newCol < size:
             newEmptyTile = newRow * size + newCol
             newBoard = self.board[:]
-            newBoard[self.emptyTile], newBoard[newEmptyTile] = newBoard[newEmptyTile], newBoard[self.emptyTile]
-            return PuzzleState(newBoard, newEmptyTile, self, size, direction)
+            newBoard[self.findEmptyTile()], newBoard[newEmptyTile] = newBoard[newEmptyTile], newBoard[self.findEmptyTile()]
+            return PuzzleState(newBoard, self, size, direction)
         else:
             return None
         
