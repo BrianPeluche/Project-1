@@ -1,3 +1,4 @@
+#titlePuzzle
 class PuzzleState:
 
     # Constructor to initialize the puzzle state

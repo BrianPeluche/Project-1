@@ -1,10 +1,6 @@
 #main.py
 from problem import Problem
 from heuristic import a_star, count, euclidean
-
-#print("\nWelcome to XXX bgarc208/hwheeler 8 puzzle solver. Type “1” \nto use a default puzzle, or “2” to enter your own puzzle.\n")
-#from heuristic import count, a_star, euclidean
-
 from algorithm.uniformSearch import uniformSearch
 from puzzle.tilePuzzle import PuzzleState
 def main():
@@ -49,28 +45,11 @@ def main():
         return
     elif user_input == 2:
         problem = Problem(initial)
-        #h = lambda s: count(s)
         h = count
     else:
         problem = Problem(initial)
         h = euclidean
 
-
-
-        #a_star(initial, h_func = h, trace = True)
-        #puzzle = PuzzleState(list(initial), None, 3, "Initial State")
-        #s = uniformSearch(puzzle)
-        #s.uniformCostSearch()
-    # elif user_input == 2:
-    #     #h = lambda s: count(s)
-    #     h = count
-    # else:
-    #     h = euclidean
-
-
-
-    # a_star(initial, h_func = h, trace = True)
-    #a_star(problem, h, trace = True)
     depth, expanded, max_q = a_star(problem, h, trace=True)
 
     print(f"To solve this problem the search algorithm expanded a total of {expanded} nodes.")

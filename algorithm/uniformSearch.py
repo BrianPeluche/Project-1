@@ -1,3 +1,4 @@
+#algorithm/uniformSearch.py
 from puzzle.puzzleTurns import Turns
 
 class uniformSearch:
