@@ -25,17 +25,17 @@ def count(s,goal): # counts how many tiles are not in the correct position
 def a_star(problem, h_func, trace = True):
     start = problem.initial
     g_best = {start: 0} # g_best[state] will store the cheapest known cost to reach state from the start
-    h0 = h_func(start, problem.goal)
-    # (f, h, tie, state)
-    pq = [(h0, h0, 0, start)]
+    h0 = h_func(start, problem.goal) # Heuristic start
+    pq = [(h0, h0, 0, start)] # (f, h, tie, state)
     max_frontier = 1 # we will track how big the frontier (priority queue) got
     nodes_expanded = 0
-    closed = set()
+    closed = set() # states we have already expanded
     counter = 0
 
     while pq: # keep looping going while there are states to explore
-        max_frontier = max(max_frontier, len(pq))
-        f, curr_h, _, s = heapq.heappop(pq)
+        #Is current frontier (len(pq))the max we’ve seen  (max_frontier), update it. If not, keep the old one
+        max_frontier = max(max_frontier, len(pq)) 
+        f, curr_h, tiee, s = heapq.heappop(pq) # for heapq.heappush(pq, (new_g + new_h, new_h, counter, next_state)), f and tire are ignored
         if s in closed: # if we've already expanded this state, skip it
             continue
         closed.add(s) # mark this state as done
