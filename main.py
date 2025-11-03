@@ -1,6 +1,4 @@
-#main.py
-#from heuristic import count, a_star, euclidean
-
+from algorithm.heuristic import count, a_star, euclidean
 from algorithm.uniformSearch import uniformSearch
 from puzzle.tilePuzzle import PuzzleState
 
@@ -19,7 +17,7 @@ else:
     row_one = list(map(int, input("Enter the first row, use space or tabs between numbers  ").split()))
     row_two = list(map(int, input("Enter the second row, use space or tabs between numbers  ").split()))
     row_three = list(map(int, input("Enter the third row, use space or tabs between numbers  ").split()))
-    combined_list = row_one + row_two + row_three # checking if list combines
+    combined_list = row_one + row_two + row_three 
     initial = tuple(combined_list)
     print(combined_list)
     print(row_one)
@@ -40,12 +38,10 @@ if user_input == 1:
     puzzle = PuzzleState(list(initial), None, 3, "Initial State")
     s = uniformSearch(puzzle)
     s.uniformCostSearch()
-# elif user_input == 2:
-#     #h = lambda s: count(s)
-#     h = count
-# else:
-#     h = euclidean
-
-
-
-# a_star(initial, h_func = h, trace = True)
+elif user_input == 2:
+    #h = lambda s: count(s)
+    h = count
+    a_star(initial, h_func=h, trace = True)
+else:
+    h = euclidean
+    a_star(initial, h_func=h, trace = True)

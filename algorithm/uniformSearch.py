@@ -9,7 +9,7 @@ class uniformSearch:
         levels = [[self.initialState]]
         goalState = None
 
-        while goalState is None:
+        while True:
             next_level = []
             for state in levels[-1]:
                 if state.foundGoalState(state.boardSize):
@@ -19,7 +19,9 @@ class uniformSearch:
                 moves = self.turns.tileMoves(state)
                 for _, new_state in moves:
                     next_level.append(new_state)
-                    
+
+            if goalState is not None:
+                break
             if not next_level:
                 print("No solution found.")
                 return None
