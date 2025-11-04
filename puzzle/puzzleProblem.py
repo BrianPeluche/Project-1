@@ -1,9 +1,9 @@
 #puzzleTurns.py
-from puzzle.tilePuzzle import PuzzleState
+from puzzle.nodePuzzle import PuzzleNode
 
 
-class Turns:
-    # Constructor to initialize the Turns class
+class Problem:
+    # Constructor to initialize the Problem class
     def __init__(self, initialState, cost=0, goal=None):
         self.initialState = initialState
         self.cost = cost
@@ -33,25 +33,13 @@ class Turns:
     def possibleMoves(self, currState, direction):
         size = currState.boardSize
         if direction == 'up':
-            if currState.emptyTilePos(size)[0] == 0:
-                return False
-            else:
-                return True
+            return currState.emptyTilePos(size)[0] != 0
         elif direction == 'down':
-            if currState.emptyTilePos(size)[0] == size-1:
-                return False
-            else:
-                return True
+            return currState.emptyTilePos(size)[0] != size - 1
         elif direction == 'left':
-            if currState.emptyTilePos(size)[1] == 0:
-                return False
-            else:
-                return True
+            return currState.emptyTilePos(size)[1] != 0
         elif direction == 'right':
-            if currState.emptyTilePos(size)[1] == size-1:
-                return False
-            else:
-                return True
+            return currState.emptyTilePos(size)[1] != size - 1
         else:
             return False
 
@@ -63,7 +51,8 @@ class Turns:
         for direction in directions:
             if self.possibleMoves(currState, direction):
                 newState = currState.moveTile(direction, size)
-                newState.prevState = currState
-                moves.append((direction, newState))
-                self.cost += 1
+                if newState is not None:
+                    newState.prevState = currState
+                    moves.append((direction, newState))
+                    self.cost += 1
         return moves

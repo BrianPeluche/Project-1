@@ -1,7 +1,7 @@
 #main.py
 from algorithm.heuristic import a_star, count, euclidean
 from algorithm.uniformSearch import uniformSearch
-from puzzle.tilePuzzle import PuzzleState
+from puzzle.nodePuzzle import PuzzleNode
 def main():
 
     print("\nWelcome to bgarc208/hwhee004 8 puzzle solver. Type '1' \nto use a default puzzle, or '2' to enter your own puzzle.\n")
@@ -27,7 +27,7 @@ def main():
 
     print(initial)
     # Create initial puzzle state
-    puzzle = PuzzleState(list(initial), None, 3, "Initial State")
+    puzzle = PuzzleNode(list(initial), None, 3, "Initial State")
     
     print("\nEnter your choice of algorithm")
     print("\n1) Uniform Cost Search\n2) A* with the Misplaced Tile heuristic.\n3) A* with the Euclidean distance heuristic.\n")

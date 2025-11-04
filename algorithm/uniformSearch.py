@@ -1,10 +1,10 @@
 #algorithm/uniformSearch.py
-from puzzle.puzzleTurns import Turns
+from puzzle.puzzleProblem import Problem
 
 class uniformSearch:
     def __init__(self, initialState):
         self.initialState = initialState
-        self.turns = Turns(initialState, cost=0)
+        self.problem = Problem(initialState, cost=0)
 
     def uniformCostSearch(self):
         levels = [[self.initialState]]
@@ -17,7 +17,7 @@ class uniformSearch:
                     goalState = state
                     break
 
-                moves = self.turns.tileMoves(state)
+                moves = self.problem.tileMoves(state)
                 for _, new_state in moves:
                     next_level.append(new_state)
 

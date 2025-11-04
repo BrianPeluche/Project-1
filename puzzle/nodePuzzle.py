@@ -1,6 +1,6 @@
 #tilePuzzle.py
-class PuzzleState:
-    # Constructor to initialize the puzzle state with A* search properties
+class PuzzleNode:
+    # Constructor to initialize the puzzle node with A* search properties
     def __init__(self, board, prevState=None, boardSize=3, direction=None, g_cost=0, h_cost=0): 
         self.board = board
         self.prevState = prevState
@@ -51,7 +51,7 @@ class PuzzleState:
             newEmptyTile = newRow * size + newCol
             newBoard = self.board[:]
             newBoard[self.findEmptyTile()], newBoard[newEmptyTile] = newBoard[newEmptyTile], newBoard[self.findEmptyTile()]
-            return PuzzleState(newBoard, self, size, direction)
+            return PuzzleNode(newBoard, self, size, direction)
         else:
             return None
         
