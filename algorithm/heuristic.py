@@ -1,96 +1,88 @@
-import heapq # proirity queue
+# heuristic.py
+import heapq
 import math
 from puzzle.tilePuzzle import PuzzleState
 from puzzle.puzzleTurns import Turns
 
-goal =  (1, 2, 3, 4, 5, 6, 7, 8, 0)
-
-def euclidean(s):
+def euclidean(state, turns):
+    #Calculate Euclidean distance heuristic
     dist = 0.0
-    for idx, val in enumerate(s.board):
-        if val == 0:       # skip the blank
+    goal = turns.goal
+    for idx, val in enumerate(state.board):
+        if val == 0:  # skip the blank tile; we don't measure distance for it
             continue
-        cur_r, cur_c = divmod(idx, 3)          # where the tile is now
-        goal_idx = goal.index(val)             # where the tile should go
-        goal_r, goal_c = divmod(goal_idx, 3)
-        dist += math.sqrt((cur_r - goal_r)**2 + (cur_c - goal_c)**2)
+        cur_r, cur_c = divmod(idx, state.boardSize) # divisor and quotient
+        goal_idx = goal.index(val)
+        goal_r, goal_c = divmod(goal_idx, state.boardSize)
+        dist += math.sqrt((cur_r - goal_r) **2 + (cur_c - goal_c) **2) # Euclidean distance = sqrt((x1 - x2)^2 + (y1 - y2)^2)
     return dist
 
-def grid(state): # outputs the grid
-    
-    out = []
-    for r in range(3):
-        row = []
-        for c in range(3):
-            v = state.board[r * 3 + c] # finds number in grid
-            if v == 0: # if 0 found then add b
-                row.append("b")
-            else: # turn number into string
-                row.append(str(v))
-        out.append(" " + " ".join(row)) # join the number strings
-    return out
-
-def count(s):
+def count(state, turns): # count how many tiles are not in the correct position
+    """Count misplaced tiles heuristic"""
     c = 0
-    solved_puzzle = [1, 2, 3, 4, 5, 6, 7, 8, 0]
-    for i in range (9):
-        if s.board[i] != 0 and s.board[i] != solved_puzzle[i]: # if it doenst match increment
+    goal = turns.goal
+    for i in range(len(state.board)):
+        if state.board[i] != 0 and state.board[i] != goal[i]: # if it doesnt match increment c += 1, return c
             c += 1
     return c
-
-def a_star(initial, h_func, trace = True): # 
-    # Convert initial tuple to PuzzleState if needed
-    if isinstance(initial, tuple):
-        initial_state = PuzzleState(list(initial), None, 3, None)
-    else:
-        initial_state = initial
     
-    # Create Turns helper for move generation
-    turns = Turns(initial_state, cost=0)
 
-    counter = 0
-    g_best = {tuple(initial_state.board): 0}
-    h0 = h_func(initial_state)
-    pq = [(h0, h0, counter, initial_state)]  # (f, h, tie, state)
-    max_frontier = 1
+def a_star(initial_state, h_func, trace=True):
+    # Set up initial state and Turns helper
+    turns = Turns(initial_state)
+    
+    # Initialize A* search
+    g_best = {tuple(initial_state.board): 0} # g_best[state] will store the cheapest known cost to reach state from the start
+    h0 = h_func(initial_state, turns)
+    initial_state.g = 0
+    initial_state.h = h0
+    initial_state.f = h0
+    
+    pq = [(h0, h0, 0, initial_state)]
+    max_frontier = 1 # we will track how big the frontier (priority queue) got
     nodes_expanded = 0
     closed = set()
+    counter = 0
 
-    while pq:
+    while pq: # keep looping going while there are states to explore
         max_frontier = max(max_frontier, len(pq))
-        f, cur_h, _, s = heapq.heappop(pq)
+        f, curr_h, _, s = heapq.heappop(pq)
         board_tuple = tuple(s.board)
-        if board_tuple in closed:
+        
+        if board_tuple in closed: # if we've already expanded this state, skip it
             continue
-        closed.add(board_tuple)
-        g = g_best[board_tuple]
+            
+        closed.add(board_tuple) # mark this state as done
+        g = g_best[board_tuple] # g value (actual cost from start to this state)
+        nodes_expanded += 1 # expanding node
 
-        if trace:
-            print(f'The best state to expand with  g(n) = {g} and h(n) = {cur_h} is…')
-            for line in grid(s):
+        if trace: # if trace is true, print what is happening
+            print(f"The best state to expand with g(n) = {g} and h(n) = {curr_h} is...")
+            for line in turns.grid(s):
                 print(line)
-            print('Expanding this node…\n')
+            print("Expanding this node...\n")
 
-        if s.foundGoalState(3):  # 3x3 puzzle
+        if turns.is_goal(s): # check if we reached the goal
             print("\nGOALL!!!!")
             print("\nTo solve this problem the search algorithm expanded a total of", nodes_expanded, "nodes.")
             print("The maximum number of nodes in the queue at any one time: ", max_frontier)
             print("The depth of the goal node was ", g)
             return
 
-        nodes_expanded += 1
-
-        for _, ns in turns.tileMoves(s):
-            if ns is None:
+        for _, next_state in turns.tileMoves(s): # otherwise, look at all the states we can reach in 1 move from s
+            if next_state is None: # invalid move, no next state
                 continue
-            board_tuple = tuple(ns.board)
-            ng = g + 1  # unit step cost
-            if board_tuple not in g_best or ng < g_best[board_tuple]:
-                g_best[board_tuple] = ng
-                nh = h_func(ns)
+                
+            board_tuple = tuple(next_state.board)
+            new_g = g + 1 # moving to a neighbor costs 1 more step
+            
+            if board_tuple not in g_best or new_g < g_best[board_tuple]: # if this path to neighbor is cheaper, save the path
+                g_best[board_tuple] = new_g
+                next_state.g = new_g
+                next_state.h = h_func(next_state, turns) # how far this neighbor is from the goal
+                next_state.f = new_g + next_state.h
                 counter += 1
-                heapq.heappush(pq, (ng + nh, nh, counter, ns))
+                heapq.heappush(pq, (next_state.f, next_state.h, counter, next_state)) # push the neighbor into the priority queue with its f = g + h
 
-    # Unsolvable or exhausted
     print("No solution found.")
-    return None
+    return -1, nodes_expanded, max_frontier # return -1 if no solution

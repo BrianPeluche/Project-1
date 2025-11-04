@@ -1,11 +1,19 @@
+#tilePuzzle.py
 class PuzzleState:
-
-    # Constructor to initialize the puzzle state
-    def __init__(self, board, prevState, boardSize, direction): 
+    # Constructor to initialize the puzzle state with A* search properties
+    def __init__(self, board, prevState=None, boardSize=3, direction=None, g_cost=0, h_cost=0): 
         self.board = board
         self.prevState = prevState
         self.boardSize = boardSize
         self.direction = direction
+        # A* search properties
+        self.g = g_cost  # cost from start to this node
+        self.h = h_cost  # heuristic estimate to goal
+        self.f = g_cost + h_cost  # total estimated cost
+
+    def __lt__(self, other):
+        # For heapq comparison in A* search
+        return self.f < other.f
 
     # Method to find the position of the empty tile (0)
     def findEmptyTile(self):
