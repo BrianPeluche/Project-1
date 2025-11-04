@@ -24,7 +24,6 @@ def main():
         print(row_two)
         print(row_three)
 
-    print(initial)
     # Create initial puzzle state
     puzzle = PuzzleNode(list(initial), None, 3, "Initial State")
     
@@ -42,7 +41,7 @@ def main():
     elif user_input == 2:
         h = count
         a_star(puzzle, h, trace=True)
-    else:
+    elif user_input == 3:
         h = euclidean
         a_star(puzzle, h, trace=True)
 

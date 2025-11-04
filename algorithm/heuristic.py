@@ -87,4 +87,6 @@ def a_star(initial_state, h_func, trace=True):
                 heapq.heappush(pq, (next_state.f, next_state.h, counter, next_state)) # push the neighbor into the priority queue with its f = g + h
 
     print("No solution found.")
-    return -1, nodes_expanded, max_frontier # return -1 if no solution
+    print("The algorithm expanded a total of", nodes_expanded, "nodes.")
+    print("The maximum number of nodes in the queue at any one time: ", max_frontier)
+    return -1 # return -1 if no solution
