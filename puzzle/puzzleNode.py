@@ -1,9 +1,8 @@
 #tilePuzzle.py
 class PuzzleNode:
     # Constructor to initialize the puzzle node with A* search properties
-    def __init__(self, board, prevState=None, boardSize=3, direction=None, g_cost=0, h_cost=0): 
+    def __init__(self, board, boardSize, direction=None, g_cost=0, h_cost=0): 
         self.board = board
-        self.prevState = prevState
         self.boardSize = boardSize
         self.direction = direction
         # A* search properties
@@ -25,12 +24,6 @@ class PuzzleNode:
         col = self.findEmptyTile() % size
         return (row, col)
     
-    # Method to check if the current state is the goal state
-    def foundGoalState(self, size):
-        numTiles = size * size
-        goalState = list(range(1, numTiles)) + [0]
-        return self.board == goalState
-    
     # Method to move the empty tile in a specified direction
     def moveTile(self, direction, size):
         row, col = self.emptyTilePos(size)
@@ -51,7 +44,7 @@ class PuzzleNode:
             newEmptyTile = newRow * size + newCol
             newBoard = self.board[:]
             newBoard[self.findEmptyTile()], newBoard[newEmptyTile] = newBoard[newEmptyTile], newBoard[self.findEmptyTile()]
-            return PuzzleNode(newBoard, self, size, direction)
+            return PuzzleNode(newBoard, size, direction)
         else:
             return None
         

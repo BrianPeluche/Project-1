@@ -4,22 +4,16 @@ from puzzle.puzzleNode import PuzzleNode
 
 class Problem:
     # Constructor to initialize the Problem class
-    def __init__(self, initialState, cost=0, goal=None):
+    def __init__(self, initialState, cost=0):
         self.initialState = initialState
         self.cost = cost
-        # If no goal specified, use default 8-puzzle goal
-        if goal is None:
-            size = initialState.boardSize
-            self.goal = list(range(1, size * size)) + [0]
-        else:
-            self.goal = goal
+        size = initialState.boardSize
+        self.goal = list(range(1, size * size)) + [0]
 
     def is_goal(self, state):
-        """Check if state matches goal configuration"""
         return state.board == self.goal
 
     def grid(self, state):
-        """Display state as grid with 'b' for blank"""
         out = []
         for r in range(state.boardSize):
             row = []
@@ -52,7 +46,6 @@ class Problem:
             if self.possibleMoves(currState, direction):
                 newState = currState.moveTile(direction, size)
                 if newState is not None:
-                    newState.prevState = currState
                     moves.append((direction, newState))
                     self.cost += 1
         return moves
