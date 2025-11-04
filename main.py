@@ -1,11 +1,9 @@
 #main.py
-from problem import Problem
-from heuristic import a_star, count, euclidean
-from algorithm.uniformSearch import uniformSearch
-from puzzle.tilePuzzle import PuzzleState
+from algorithm.heuristic import a_star, uniform_cost, count, euclidean
+from puzzle.puzzleNode import PuzzleNode
 def main():
 
-    print("\nWelcome to bgarc208/hwhee004 8 puzzle solver. Type “1” \nto use a default puzzle, or “2” to enter your own puzzle.\n")
+    print("\nWelcome to bgarc208/hwhee004 8 puzzle solver. Type '1' \nto use a default puzzle, or '2' to enter your own puzzle.\n")
 
     user_input = int(input("Please enter a number: "))
         
@@ -27,7 +25,9 @@ def main():
         print(row_three)
 
     print(initial)
-    problem = Problem(initial)
+    # Create initial puzzle state
+    puzzle = PuzzleNode(list(initial), None, 3, "Initial State")
+    
     print("\nEnter your choice of algorithm")
     print("\n1) Uniform Cost Search\n2) A* with the Misplaced Tile heuristic.\n3) A* with the Euclidean distance heuristic.\n")
 
@@ -37,24 +37,16 @@ def main():
         user_input = int(input("Please enter a number: "))
 
     if user_input == 1:
-        h = 0
-        #a_star(initial, h_func = h, trace = True)
-        puzzle = PuzzleState(list(initial), None, 3, "Initial State")
-        s = uniformSearch(puzzle)
-        s.uniformCostSearch()
-        return
+        h = uniform_cost
+        a_star(puzzle, h, trace=True)
     elif user_input == 2:
-        problem = Problem(initial)
         h = count
+        a_star(puzzle, h, trace=True)
     else:
-        problem = Problem(initial)
         h = euclidean
+        a_star(puzzle, h, trace=True)
 
-    depth, expanded, max_q = a_star(problem, h, trace=True)
-
-    print(f"To solve this problem the search algorithm expanded a total of {expanded} nodes.")
-    print(f"The maximum number of nodes in the queue at any one time: {max_q}.")
-    print(f"The depth of the goal node was {depth}.")
+    return
 
 if __name__ == "__main__":
     main()
