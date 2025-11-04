@@ -1,9 +1,10 @@
-from puzzle.puzzleTurns import Turns
+#algorithm/uniformSearch.py
+from puzzle.puzzleTurns import Problem
 
 class uniformSearch:
     def __init__(self, initialState):
         self.initialState = initialState
-        self.turns = Turns(initialState, cost=0)
+        self.turns = Problem(initialState, cost=0)
 
     def uniformCostSearch(self):
         levels = [[self.initialState]]
