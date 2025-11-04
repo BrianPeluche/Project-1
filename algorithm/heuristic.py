@@ -1,7 +1,7 @@
 # heuristic.py
 import heapq
 import math
-from puzzle.nodePuzzle import PuzzleNode
+from puzzle.puzzleNode import PuzzleNode
 from puzzle.puzzleProblem import Problem
 
 def euclidean(state, problem):
@@ -25,7 +25,9 @@ def count(state, problem): # count how many tiles are not in the correct positio
         if state.board[i] != 0 and state.board[i] != goal[i]:
             c += 1
     return c
-    
+
+def uniform_cost(state, problem):
+    return 0
 
 def a_star(initial_state, h_func, trace=True):
     # Set up initial state and Problem helper
@@ -54,13 +56,6 @@ def a_star(initial_state, h_func, trace=True):
             
         closed.add(board_tuple) # mark this state as done
         g = g_best[board_tuple] # g value (actual cost from start to this state)
-        nodes_expanded += 1 # expanding node
-
-        if trace: # if trace is true, print what is happening
-            print(f"The best state to expand with g(n) = {g} and h(n) = {curr_h} is...")
-            for line in problem.grid(s):
-                print(line)
-            print("Expanding this node...\n")
 
         if problem.is_goal(s): # check if we reached the goal
             print("\nGOALL!!!!")
@@ -68,6 +63,13 @@ def a_star(initial_state, h_func, trace=True):
             print("The maximum number of nodes in the queue at any one time: ", max_frontier)
             print("The depth of the goal node was ", g)
             return
+
+        if trace: # if trace is true, print what is happening
+            print(f"The best state to expand with g(n) = {g} and h(n) = {curr_h} is...")
+            for line in problem.grid(s):
+                print(line)
+            print("Expanding this node...\n")
+            nodes_expanded += 1 # expanding node
 
         for _, next_state in problem.tileMoves(s): # otherwise, look at all the states we can reach in 1 move from s
             if next_state is None: # invalid move, no next state

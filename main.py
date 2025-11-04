@@ -1,7 +1,6 @@
 #main.py
-from algorithm.heuristic import a_star, count, euclidean
-from algorithm.uniformSearch import uniformSearch
-from puzzle.nodePuzzle import PuzzleNode
+from algorithm.heuristic import a_star, uniform_cost, count, euclidean
+from puzzle.puzzleNode import PuzzleNode
 def main():
 
     print("\nWelcome to bgarc208/hwhee004 8 puzzle solver. Type '1' \nto use a default puzzle, or '2' to enter your own puzzle.\n")
@@ -38,8 +37,8 @@ def main():
         user_input = int(input("Please enter a number: "))
 
     if user_input == 1:
-        s = uniformSearch(puzzle)
-        s.uniformCostSearch()
+        h = uniform_cost
+        a_star(puzzle, h, trace=True)
     elif user_input == 2:
         h = count
         a_star(puzzle, h, trace=True)

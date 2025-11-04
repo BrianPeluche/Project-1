@@ -59,5 +59,6 @@ class PuzzleNode:
     def printBoard(self):
         size = self.boardSize
         for i in range(size):
-            print(self.board[i*size:(i+1)*size])
+            row = self.board[i*size:(i+1)*size]
+            print(" ".join(map(str, row)))
         

@@ -1,5 +1,5 @@
 #puzzleTurns.py
-from puzzle.nodePuzzle import PuzzleNode
+from puzzle.puzzleNode import PuzzleNode
 
 
 class Problem:
